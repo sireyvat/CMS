@@ -11,11 +11,21 @@ instead of polling — both are valid; polling is simpler to deploy and is
 used here for clarity.
 """
 import asyncio
+import os
+import sys
 import httpx
+import uvicorn
+from fastapi import FastAPI
 
 from app.config import settings
 from app.telegram_bot import send_webapp_launch_button, set_bot_commands, API_BASE
 
+# បង្កើត Web Server ក្លែងក្លាយដើម្បីដោះស្រាយបញ្ហា Port Check របស់ Render Free Plan
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"status": "Bot is running successfully", "mode": "Free Plan Web Worker"}
 
 async def poll_loop():
     await set_bot_commands()
@@ -36,6 +46,23 @@ async def poll_loop():
                 print("Polling error:", e)
                 await asyncio.sleep(3)
 
+async def main():
+    # ចាប់យក Port ដែល Render ផ្ដល់ឱ្យ (លំនាំដើមគឺ 10000 ឬ 8000)
+    port = int(os.environ.get("PORT", 8000))
+    
+    # កំណត់រចនាសម្ព័ន្ធដំណើរការ Web Server (Uvicorn)
+    config = uvicorn.Config(app, host="0.0.0.0", port=port, log_level="info")
+    server = uvicorn.Server(config)
+    
+    # ដំណើរការទាំង Web Server ក្លែងក្លាយ និង Polling Loop របស់ Bot ទន្ទឹមគ្នាក្នុងពេលតែមួយ
+    await asyncio.gather(
+        server.serve(),
+        poll_loop()
+    )
 
 if __name__ == "__main__":
-    asyncio.run(poll_loop())
+    # បើដំណើរការលើ Windows ត្រូវកំណត់ Event Loop Policy
+    if sys.platform == "win32":
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+        
+    asyncio.run(main())
