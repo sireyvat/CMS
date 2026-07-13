@@ -29,7 +29,7 @@ services:
       - key: SESSION_SECRET_KEY
         generateValue: true
 
-  - type: worker
+  - type: web
     name: classroom-bot
     runtime: docker
     dockerfilePath: ./Dockerfile.bot
