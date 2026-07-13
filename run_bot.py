@@ -65,4 +65,5 @@ if __name__ == "__main__":
     if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         
+    # រត់មុខងារ main() តែមួយគត់ដើម្បីដំណើរការទាំង Web Server ផង និង Bot ផងទន្ទឹមគ្នា
     asyncio.run(main())
