@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Daily English Quiz</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+  <div id="app">
+    <div id="loading" class="screen">
+      <div class="spinner"></div>
+      <p>Checking access…</p>
+    </div>
+
+    <div id="denied" class="screen hidden">
+      <h1>🚫 Access Denied</h1>
+      <p id="denied-message" class="muted"></p>
+    </div>
+
+    <div id="quiz" class="screen hidden">
+      <header class="quiz-header">
+        <div id="timer" class="timer">15:00</div>
+        <div id="progress" class="progress">Question 1/9</div>
+      </header>
+      <div id="question-card" class="card"></div>
+      <div id="feedback" class="feedback hidden"></div>
+      <button id="next-btn" class="btn-primary hidden">Next →</button>
+    </div>
+
+    <div id="finished" class="screen hidden">
+      <h1 id="finished-title">✅ Quiz Complete!</h1>
+      <p id="finished-score" class="big-score"></p>
+      <p class="muted">You can close this window now.</p>
+    </div>
+
+    <div id="locked" class="screen hidden">
+      <h1>🔒 Quiz Locked</h1>
+      <p class="muted">
+        You left the quiz screen (switched apps, minimized, or changed tabs), so it was
+        automatically submitted and flagged. Your teacher has been notified.
+      </p>
+    </div>
+  </div>
+
+  <!-- Anti-cheat watermark overlay: a faint, moving identifier discourages sharing screenshots
+       (it cannot PREVENT screen capture — no web technology can — but it deters casual sharing
+       and makes leaked screenshots traceable back to the session). -->
+  <div id="watermark"></div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

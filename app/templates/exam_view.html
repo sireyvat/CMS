@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ paper.title }}</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+  @media print { .no-print { display: none; } }
+  .exam-header { text-align:center; margin-bottom: 24px; }
+  .q-list { list-style: decimal; padding-left: 22px; }
+  .q-list li { margin-bottom: 14px; }
+  .section-title { margin-top: 28px; border-bottom: 2px solid #1e40af; padding-bottom: 4px; }
+</style>
+</head>
+<body>
+<main class="container">
+  <div class="no-print"><a href="/examgen">← Back to Exam Generator</a> · <button onclick="window.print()">🖨 Print</button></div>
+  <div class="exam-header">
+    <h1>{{ paper.title }}</h1>
+    <p class="muted">Covers lessons from {{ paper.range_start }} to {{ paper.range_end }} · {{ paper.question_ids|length }} questions</p>
+    <p>Name: _______________________  Date: ____________  Score: ______ / {{ paper.question_ids|length * 10 }}</p>
+  </div>
+
+  {% for section_name, qs in sections.items() %}
+    {% if qs %}
+    <h2 class="section-title">Section — {{ section_name|capitalize }}</h2>
+    <ol class="q-list">
+      {% for q in qs %}
+        <li>
+          {{ q.question_text }}
+          {% if q.section == 'mcq' and q.options %}
+            <ul>
+            {% for opt in q.options %}<li>☐ {{ opt }}</li>{% endfor %}
+            </ul>
+          {% elif q.section == 'listening' %}
+            <p class="muted">(Teacher: play the audio clip for this item, or read the sentence aloud twice.)</p>
+          {% else %}
+            <p>Answer: ______________________________________</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+  {% endfor %}
+</main>
+</body>
+</html>

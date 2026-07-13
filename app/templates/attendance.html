@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<h1>Daily Attendance</h1>
+<form method="get" class="filter-form">
+  <input type="date" name="date" value="{{ target_date }}">
+  <button type="submit">Load</button>
+</form>
+
+<form method="post" action="/attendance/mark" class="form">
+  <input type="hidden" name="date" value="{{ target_date }}">
+  <table class="table">
+    <thead><tr><th>Student</th><th>Present</th><th>Absent</th></tr></thead>
+    <tbody>
+    {% for s in students %}
+      {% set current = status_by_student.get(s.id, 'Absent') %}
+      <tr>
+        <td>{{ s.full_name }} <input type="hidden" name="student_id" value="{{ s.id }}"></td>
+        <td><input type="radio" name="status_{{ s.id }}" value="Present" {{ 'checked' if current=='Present' }}></td>
+        <td><input type="radio" name="status_{{ s.id }}" value="Absent" {{ 'checked' if current=='Absent' }}></td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3">No active students.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" class="btn-primary">Save Attendance</button>
+</form>
+<p class="muted">Only students marked <strong>Present</strong> for today can open the quiz Mini App.</p>
+{% endblock %}

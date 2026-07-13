@@ -1,0 +1,66 @@
+:root {
+  --bg: var(--tg-theme-bg-color, #0f172a);
+  --text: var(--tg-theme-text-color, #f1f5f9);
+  --hint: var(--tg-theme-hint-color, #94a3b8);
+  --button: var(--tg-theme-button-color, #2563eb);
+  --button-text: var(--tg-theme-button-text-color, #ffffff);
+  --card: #1e293b;
+  --danger: #ef4444;
+  --success: #22c55e;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Best-effort deterrents only — NOT real screenshot/recording prevention.
+     No web API can block OS-level screen capture on iOS/Android/desktop.
+     These reduce casual copy/share friction; the real security control is
+     the server-side focus-loss auto-submit + teacher alert, not this CSS. */
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+}
+input, textarea { user-select: text; -webkit-user-select: text; }
+img { -webkit-user-drag: none; pointer-events: none; }
+
+#app { padding: 16px; max-width: 480px; margin: 0 auto; min-height: 100vh; }
+.screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center; gap: 12px; }
+.hidden { display: none !important; }
+.muted { color: var(--hint); font-size: .9rem; }
+.spinner { width: 36px; height: 36px; border: 4px solid #334155; border-top-color: var(--button); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.quiz-header { display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px; position: sticky; top:0; background: var(--bg); padding: 8px 0; z-index: 5;}
+.timer { font-size: 1.4rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer.warning { color: var(--danger); animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: .4; } }
+.progress { color: var(--hint); font-size: .9rem; }
+
+.card { background: var(--card); border-radius: 14px; padding: 20px; margin-bottom: 16px; text-align:left; }
+.card .section-badge { display:inline-block; background: var(--button); color: var(--button-text); font-size: .72rem; padding: 3px 9px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .04em; }
+.card .q-text { font-size: 1.05rem; line-height: 1.5; white-space: pre-wrap; }
+
+.options { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.option-btn { background: #334155; color: var(--text); border: 2px solid transparent; border-radius: 10px; padding: 12px 14px; text-align:left; font-size: .95rem; cursor: pointer; }
+.option-btn:active { transform: scale(0.98); }
+.option-btn.selected { border-color: var(--button); }
+
+.answer-input { width: 100%; padding: 12px 14px; border-radius: 10px; border: none; background: #334155; color: var(--text); font-size: 1rem; margin-top: 16px; }
+
+.audio-row { display:flex; align-items:center; gap: 10px; margin-top: 16px; }
+.play-btn { background: var(--button); color: var(--button-text); border: none; border-radius: 50%; width: 52px; height: 52px; font-size: 1.3rem; cursor: pointer; }
+
+.feedback { padding: 10px 14px; border-radius: 10px; font-weight: 600; margin-bottom: 12px; }
+.feedback.correct { background: rgba(34,197,94,.15); color: var(--success); }
+.feedback.incorrect { background: rgba(239,68,68,.15); color: var(--danger); }
+
+.btn-primary { width: 100%; background: var(--button); color: var(--button-text); border: none; padding: 14px; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+
+.big-score { font-size: 2.2rem; font-weight: 800; color: var(--button); }
+
+#watermark {
+  position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: rgba(255,255,255,0.05); transform: rotate(-30deg);
+  white-space: pre; text-align: center; line-height: 3.2;
+}

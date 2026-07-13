@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Gradebook{% endblock %}
+{% block content %}
+<h1>Gradebook — {{ month }}</h1>
+<table class="table">
+  <thead><tr><th>#</th><th>Student</th><th>Points</th><th>Quizzes Taken</th><th>⚠️ Cheating Incidents</th></tr></thead>
+  <tbody>
+  {% for gb, student in rows %}
+    <tr class="{{ 'danger-row' if gb.cheating_incidents else '' }}">
+      <td>{{ loop.index }}</td>
+      <td>{{ student.full_name }}</td>
+      <td>{{ gb.total_points }}</td>
+      <td>{{ gb.quizzes_taken }}</td>
+      <td>{{ gb.cheating_incidents }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">No graded quizzes yet this month.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

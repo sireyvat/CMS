@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Lesson Logs{% endblock %}
+{% block content %}
+<h1>Lesson Logs</h1>
+
+<form method="post" action="/lessons/add" class="form">
+  <label>Date</label>
+  <input type="date" name="date" value="{{ today }}" required>
+  <label>Topic</label>
+  <input type="text" name="topic" placeholder="e.g. Present Perfect Tense" required>
+  <label>Vocabulary <small>(word:meaning;word:meaning)</small></label>
+  <textarea name="vocabulary" rows="2" placeholder="journey:a trip somewhere;ancient:very old"></textarea>
+  <label>Grammar <small>(rule | example sentence)</small></label>
+  <textarea name="grammar" rows="2" placeholder="Present perfect for experience | I have visited Paris twice."></textarea>
+  <label>Listening Text</label>
+  <input type="text" name="listening_text" placeholder="I have visited Paris twice.">
+  <button type="submit" class="btn-primary">Save Lesson</button>
+</form>
+
+<table class="table">
+  <thead><tr><th>Date</th><th>Topic</th><th>Vocabulary</th><th>Grammar</th><th></th></tr></thead>
+  <tbody>
+  {% for l in lessons %}
+    <tr>
+      <td>{{ l.date }}</td>
+      <td>{{ l.topic }}</td>
+      <td class="truncate">{{ l.vocabulary }}</td>
+      <td class="truncate">{{ l.grammar }}</td>
+      <td>
+        <form method="post" action="/lessons/{{ l.id }}/delete" onsubmit="return confirm('Delete?');">
+          <button class="btn-danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5">No lessons logged yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

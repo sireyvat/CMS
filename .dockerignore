@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+classroom.db
+.git/
+.gitignore
+venv/
+*.egg-info/

@@ -1,0 +1,47 @@
+databases:
+  - name: classroom-db
+    plan: free
+    databaseName: classroom
+    user: classroom
+
+services:
+  - type: web
+    name: classroom-web
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: classroom-db
+          property: connectionString
+      - key: BOT_TOKEN
+        sync: false
+      - key: TEACHER_ALERT_CHAT_ID
+        sync: false
+      - key: WEBAPP_PUBLIC_URL
+        sync: false   # set this to https://classroom-web.onrender.com after first deploy
+      - key: TEACHER_USERNAME
+        sync: false
+      - key: TEACHER_PASSWORD_HASH
+        sync: false
+      - key: SESSION_SECRET_KEY
+        generateValue: true
+
+  - type: worker
+    name: classroom-bot
+    runtime: docker
+    dockerfilePath: ./Dockerfile.bot
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: classroom-db
+          property: connectionString
+      - key: BOT_TOKEN
+        sync: false
+      - key: TEACHER_ALERT_CHAT_ID
+        sync: false
+      - key: WEBAPP_PUBLIC_URL
+        sync: false

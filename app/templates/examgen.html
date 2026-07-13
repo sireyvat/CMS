@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Exam Paper Generator{% endblock %}
+{% block content %}
+<h1>Exam Paper Generator</h1>
+
+<form method="post" action="/examgen/generate" class="form">
+  <label>Exam Title</label>
+  <input type="text" name="title" placeholder="July 2026 Monthly Exam" required>
+  <label>Date Range Start</label>
+  <input type="date" name="range_start" value="{{ today }}" required>
+  <label>Date Range End</label>
+  <input type="date" name="range_end" value="{{ today }}" required>
+  <button type="submit" class="btn-primary">Generate Blueprint Exam</button>
+</form>
+<p class="muted">Aggregates every lesson logged in the selected range and compiles a standardized
+Writing / Multiple Choice / Listening exam automatically.</p>
+
+<h2>Previously Generated Papers</h2>
+<table class="table">
+  <thead><tr><th>Title</th><th>Range</th><th>Questions</th><th></th></tr></thead>
+  <tbody>
+  {% for p in papers %}
+    <tr>
+      <td>{{ p.title }}</td>
+      <td>{{ p.range_start }} → {{ p.range_end }}</td>
+      <td>{{ p.question_ids|length }}</td>
+      <td><a href="/examgen/{{ p.id }}/view">View / Print →</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">No exam papers generated yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
