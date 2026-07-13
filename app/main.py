@@ -36,6 +36,7 @@ async def root():
     return RedirectResponse(url="/dashboard")
 
 
+# បន្ថែមនៅក្នុង app/main.py
 @app.get("/healthz")
-async def healthz():
+async def health_check():
     return {"status": "ok"}
