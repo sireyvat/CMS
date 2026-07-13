@@ -15,7 +15,7 @@ import bcrypt
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
 from app.config import settings
-from app.database import SessionLocal # បន្ថែមដើម្បីប្រើក្នុង verify_teacher_credentials
+from app.database import AsyncSessionLocal as SessionLocal # បន្ថែមដើម្បីប្រើក្នុង verify_teacher_credentials
 from app.models import Teacher        # បន្ថែមដើម្បីប្រើក្នុង verify_teacher_credentials
 
 _serializer = URLSafeTimedSerializer(settings.SESSION_SECRET_KEY, salt="teacher-session")
