@@ -16,11 +16,23 @@ async def login_form(request: Request):
 
 @router.post("/login")
 async def login_submit(request: Request, username: str = Form(...), password: str = Form(...)):
+    # ១. ផ្ទៀងផ្ទាត់ Username និង Password
     if not verify_teacher_credentials(username, password):
         return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
-    token = create_teacher_session_token()
+    
+    # ២. បង្កើត Token ដោយបញ្ជូន username ចូលទៅជាមួយ (កែត្រង់នេះ!)
+    token = create_teacher_session_token(username) 
+    
+    # ៣. កំណត់ Cookie និងបញ្ជូនទៅកាន់ Dashboard
     response = RedirectResponse(url="/dashboard", status_code=303)
-    response.set_cookie("teacher_session", token, httponly=True, samesite="lax", secure=True, max_age=60 * 60 * 12)
+    response.set_cookie(
+        key="teacher_session", 
+        value=token, 
+        httponly=True, 
+        samesite="lax", 
+        secure=True, 
+        max_age=60 * 60 * 12
+    )
     return response
 
 
