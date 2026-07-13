@@ -1,10 +1,5 @@
 """
 app/main.py
------------
-FastAPI application entrypoint.
-
-Run locally:   uvicorn app.main:app --reload
-Run in Docker: see Dockerfile / docker-compose.yml
 """
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
@@ -25,21 +20,20 @@ async def startup_tasks():
 
 @app.on_event("startup")
 async def on_startup():
-    # ប្រើ asyncio.create_task ដើម្បីកុំឱ្យ Database ឃាំង (Block) ដំណើរការ Startup របស់ App
     asyncio.create_task(startup_tasks())
 
-app.include_router(auth.router)
-app.include_router(admin.router)
-app.include_router(quiz.router)
-
-# 2. បង្កើត Route នេះឱ្យនៅខាងលើគេដើម្បីល្បឿន
+# ២. បង្កើត Route សម្រាប់ Render Health Check (ដាក់នៅទីនេះដើម្បីល្បឿន)
 @app.get("/healthz")
 async def health_check():
     return {"status": "ok"}
 
-# Telegram Mini App static assets
+# ៣. Routes
+app.include_router(auth.router)
+app.include_router(admin.router)
+app.include_router(quiz.router)
+
+# ៤. Static Assets
 app.mount("/webapp", StaticFiles(directory="app/static/webapp"), name="webapp")
-# Dashboard static assets
 app.mount("/static", StaticFiles(directory="app/static/dashboard"), name="dashboard_static")
 
 @app.get("/")
